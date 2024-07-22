@@ -1,0 +1,127 @@
+components:
+  schemas:
+    ClipboardContext:
+      properties:
+        windowId:
+          description: Xorg window_id
+          maximum: 4294967295
+          minimum: 0
+          type: number
+      required:
+        - windowId
+      type: object
+    CloudEvent:
+      properties:
+        data:
+          $ref: '#/components/schemas/EventPayload'
+        data_base64:
+          description: Base64 encoded event payload. Must adhere to RFC4648
+          type: string
+        datacontenttype:
+          description: Content type of the data value. Must adhere to RFC 2046 format
+          type: string
+        dataschema:
+          description: Identifies the schema that data adheres to
+          type: string
+        id:
+          description: Identifies the event
+          type: string
+        source:
+          description: Identifies the context in which an event happened
+          type: string
+        specversion:
+          description: The version of the CloudEvents specification which the event
+            uses
+          type: string
+        subject:
+          description: Describes the subject of the event in the context of the event
+            producer (identified by source)
+          type: string
+        time:
+          description: Timestamp of when the occurrence happened. Must adhere to RFC
+            3339
+          type: string
+        type:
+          description: Describes the type of event related to the originating occurrence
+          type: string
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - data
+      type: object
+    EventPayload:
+      discriminator:
+        mapping:
+          clipboard: clipboard
+          iodocument: iodocument
+        propertyName: type
+      oneOf:
+        - $ref: '#/components/schemas/iodocument'
+        - $ref: '#/components/schemas/clipboard'
+    Vector2i:
+      properties:
+        x:
+          description: the X coordinate
+          maximum: 4294967295
+          minimum: 0
+          type: number
+        y:
+          description: the Y coordinate
+          maximum: 4294967295
+          minimum: 0
+          type: number
+      required:
+        - x
+        - y
+      type: object
+    clipboard:
+      properties:
+        clipboard_context:
+          $ref: '#/components/schemas/ClipboardContext'
+        clipboard_type:
+          description: Type of clipboard
+          enum:
+            - Primary
+            - Secondary
+            - Clipboard
+          type: string
+        data:
+          description: Clipboard content
+          type: string
+        selection_end:
+          $ref: '#/components/schemas/Vector2i'
+        selection_start:
+          $ref: '#/components/schemas/Vector2i'
+        type:
+          enum:
+            - clipboard
+          type: string
+      required:
+        - data
+        - clipboard_type
+        - clipboard_context
+        - type
+      type: object
+    iodocument:
+      properties:
+        input:
+          description: User input
+          type: string
+        output:
+          description: Command output (mix of stdout & stderr)
+          type: string
+        ps1:
+          description: ps1 (prompt) AFTER the input and output
+          type: string
+        type:
+          enum:
+            - iodocument
+          type: string
+      required:
+        - input
+        - output
+        - ps1
+        - type
+      type: object

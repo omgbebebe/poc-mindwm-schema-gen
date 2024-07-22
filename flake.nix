@@ -20,7 +20,6 @@
 #            aeson.source = "1.5.0.0";# Hackage version
           };
 
-          # my-haskell-package development shell configuration
           devShell = {
             hlsCheck.enable = false;
           };
@@ -30,7 +29,7 @@
         };
 
         devShells.default = pkgs.mkShell {
-          name = "my-haskell-package custom development shell";
+          name = "asyncio-gen custom development shell";
           inputsFrom = [
             config.haskellProjects.default.outputs.devShell
           ];

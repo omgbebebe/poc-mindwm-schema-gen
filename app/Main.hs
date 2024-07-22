@@ -1,7 +1,7 @@
-module Main where
+module Main (main) where
 
-import qualified AsyncApi.Spec.V3
+import MindWM.Api
 
 main :: IO ()
 main = do
-  putStrLn "Hello, Haskell!"
+  putStrLn components
